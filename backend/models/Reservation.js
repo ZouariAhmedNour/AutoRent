@@ -5,11 +5,13 @@ const reservationSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
 
     car: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Car",
+      required: true,
     },
 
     startDate: {
@@ -25,6 +27,12 @@ const reservationSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "En attente",
+    },
+
+    paymentStatus: {
+      type: String,
+      enum: ["Non payé", "Payé"],
+      default: "Non payé",
     },
   },
   {

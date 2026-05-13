@@ -1,26 +1,44 @@
 const Payment = require("../models/Payment");
+const Reservation = require("../models/Reservation");
 
 // ==============================
 // CREATE PAYMENT
 // ==============================
 const createPayment = async (req, res) => {
   try {
-    // Récupérer données
-    const {
-      reservation,
-      amount,
-      method,
-    } = req.body;
+    // Récupérer les données envoyées depuis le front
+    const { reservation, amount, method } = req.body;
 
-    // Créer paiement
+    // Vérifier si la réservation existe
+    const reservationFound = await Reservation.findById(reservation);
+
+    if (!reservationFound) {
+      return res.status(404).json({
+        message: "Réservation introuvable",
+      });
+    }
+
+    // Vérifier si la réservation est déjà payée
+    if (reservationFound.paymentStatus === "Payé") {
+      return res.status(400).json({
+        message: "Cette réservation est déjà payée",
+      });
+    }
+
+    // Créer le paiement
     const payment = await Payment.create({
       reservation,
       amount,
       method,
     });
 
+    // Mettre à jour la réservation
+    reservationFound.paymentStatus = "Payé";
+    reservationFound.status = "Confirmée";
+    await reservationFound.save();
+
     res.status(201).json({
-      message: "Paiement effectué",
+      message: "Paiement effectué avec succès",
       payment,
     });
   } catch (error) {
@@ -35,7 +53,6 @@ const createPayment = async (req, res) => {
 // ==============================
 const getPayments = async (req, res) => {
   try {
-    // Récupérer paiements
     const payments = await Payment.find().populate("reservation");
 
     res.status(200).json(payments);

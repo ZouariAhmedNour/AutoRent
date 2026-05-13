@@ -38,17 +38,24 @@ function Login() {
 
       alert("Connexion réussie");
 
-      // redirection vers home
-      navigate("/");
-    } catch (error) {
-      console.log(error);
+      // récupérer utilisateur
+    const user = res.data.user;
 
-      alert(
-        error.response?.data?.message ||
-          "Erreur connexion"
-      );
+    // vérifier rôle admin
+    if (user.role === "admin") {
+      navigate("/admin");
+    } else {
+      navigate("/");
     }
-  };
+  } catch (error) {
+    console.log(error);
+
+    alert(
+      error.response?.data?.message ||
+        "Erreur connexion"
+    );
+  }
+};
 
   return (
     <div>

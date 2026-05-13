@@ -123,3 +123,30 @@ button {
 
   border-radius: 5px;
 }
+
+
+.reserve-form {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reserve-form input {
+  padding: 8px;
+}
+
+.available {
+  color: green;
+  font-weight: bold;
+}
+
+.not-available {
+  color: red;
+  font-weight: bold;
+}
+
+.paid-text {
+  color: green;
+  font-weight: bold;
+}
