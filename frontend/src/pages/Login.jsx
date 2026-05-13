@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import API from "../api/axios";
 
 import Navbar from "../components/Navbar";
@@ -8,6 +10,9 @@ function Login() {
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
+
+  // navigation React Router
+  const navigate = useNavigate();
 
   // fonction connexion
   const handleLogin = async (e) => {
@@ -20,7 +25,10 @@ function Login() {
       });
 
       // sauvegarder token
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem(
+        "token",
+        res.data.token
+      );
 
       // sauvegarder user
       localStorage.setItem(
@@ -29,10 +37,16 @@ function Login() {
       );
 
       alert("Connexion réussie");
+
+      // redirection vers home
+      navigate("/");
     } catch (error) {
       console.log(error);
 
-      alert("Erreur connexion");
+      alert(
+        error.response?.data?.message ||
+          "Erreur connexion"
+      );
     }
   };
 
@@ -48,14 +62,18 @@ function Login() {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
           />
 
           <input
             type="password"
             placeholder="Mot de passe"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
           />
 
           <button type="submit">

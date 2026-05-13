@@ -7,11 +7,13 @@ const jwt = require("jsonwebtoken");
 // ==============================
 const registerUser = async (req, res) => {
   try {
-    // Récupérer les données
+    console.log(req.body);
+
     const { name, email, password } = req.body;
 
-    // Vérifier si utilisateur existe déjà
     const userExists = await User.findOne({ email });
+
+    console.log("userExists =", userExists);
 
     if (userExists) {
       return res.status(400).json({
@@ -19,22 +21,21 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // Crypter mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Créer utilisateur
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
     });
 
-    // Réponse
     res.status(201).json({
       message: "Utilisateur créé avec succès",
       user,
     });
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: error.message,
     });

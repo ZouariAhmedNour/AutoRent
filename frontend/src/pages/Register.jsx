@@ -24,9 +24,11 @@ function Register() {
 
       alert("Compte créé avec succès");
     } catch (error) {
-      console.log(error);
+     console.log(error.response);
 
-      alert("Erreur inscription");
+console.log(error.response.data);
+
+alert(error.response.data.message);
     }
   };
 
